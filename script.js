@@ -1,4 +1,4 @@
-const API_URL = "https://TU-BACKEND.onrender.com/chat";
+const API_URL = "https://TU-RENDER.onrender.com/chat";
 
 function send() {
   let input = document.getElementById("input");
