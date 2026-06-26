@@ -6,6 +6,7 @@ import OpenAI from "openai";
 dotenv.config();
 
 const app = express();
+
 app.use(cors());
 app.use(express.json());
 
@@ -14,25 +15,43 @@ const client = new OpenAI({
 });
 
 app.post("/chat", async (req, res) => {
-  const message = req.body.message;
+  try {
 
-  const response = await client.chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: [
-      {
-        role: "system",
-        content: "Eres Dulce Bot 🍬, una IA dulce, amigable y creativa."
-      },
-      {
-        role: "user",
-        content: message
-      }
-    ]
-  });
+    const message = req.body.message;
 
-  res.json({
-    reply: response.choices[0].message.content
-  });
+    const response = await client.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {
+          role: "system",
+          content:
+            "Eres Dulce Bot 🍬, una IA dulce, amigable y creativa."
+        },
+        {
+          role: "user",
+          content: message
+        }
+      ]
+    });
+
+    res.json({
+      reply: response.choices[0].message.content
+    });
+
+  } catch (error) {
+
+    console.error(error);
+
+    res.status(500).json({
+      reply: "❌ Error: la IA no está conectada correctamente."
+    });
+
+  }
 });
 
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`Servidor activo en el puerto ${PORT} 🍬`);
+});
 app.listen(3000, () => console.log("Servidor activo 🍬"));
