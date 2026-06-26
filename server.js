@@ -10,9 +10,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const genAI = new GoogleGenerativeAI(
-  process.env.GEMINI_API_KEY
-);
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 app.post("/chat", async (req, res) => {
   try {
@@ -22,16 +20,30 @@ app.post("/chat", async (req, res) => {
       model: "gemini-2.5-flash"
     });
 
-    const result = await model.generateContent(
-      `Eres Dulce Bot 🍬, una IA dulce y amigable.
+    const prompt = `
+Eres Dulce Bot 🍬.
 
-Usuario: ${mensaje}`
-    );
+Reglas:
+- Hablas en español.
+- Eres dulce, amigable y divertida.
+- NO uses asteriscos (*) ni markdown.
+- Usa guiones si necesitas listas.
+- Responde claro, natural y no muy largo.
+- Usa emojis suaves.
+- Mantén tono positivo.
 
+Usuario: ${mensaje}
+
+Dulce Bot:
+`;
+
+    const result = await model.generateContent(prompt);
     const respuesta = result.response.text();
 
+    const cleaned = respuesta.replace(/\*/g, "");
+
     res.json({
-      reply: respuesta
+      reply: cleaned
     });
 
   } catch (error) {
@@ -46,5 +58,5 @@ Usuario: ${mensaje}`
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(`Servidor activo en puerto ${PORT}`);
+  console.log(`Servidor activo 🍬 en puerto ${PORT}`);
 });
