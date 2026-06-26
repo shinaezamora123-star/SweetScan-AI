@@ -16,19 +16,16 @@ function send() {
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({
-      message: text
-    })
+    body: JSON.stringify({ message: text })
   })
     .then(res => res.json())
     .then(data => {
       removeTyping();
       add(data.reply, "bot");
     })
-    .catch(error => {
+    .catch(() => {
       removeTyping();
       add("❌ Error al conectar con la IA", "bot");
-      console.error(error);
     });
 }
 
@@ -36,19 +33,27 @@ function add(text, type) {
   let chat = document.getElementById("chat");
 
   let div = document.createElement("div");
-
   div.classList.add("msg", type);
   div.innerText = text;
 
   chat.appendChild(div);
-
   chat.scrollTop = chat.scrollHeight;
 }
 
 function removeTyping() {
   document.querySelectorAll(".msg").forEach(m => {
-    if (m.innerText.includes("pensando")) {
-      m.remove();
-    }
+    if (m.innerText.includes("pensando")) m.remove();
   });
 }
+
+/* ✅ ENTER FIX (ESTO ES LO IMPORTANTE) */
+document.addEventListener("DOMContentLoaded", () => {
+  const input = document.getElementById("input");
+
+  input.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault(); // evita saltos raros
+      send();
+    }
+  });
+});
