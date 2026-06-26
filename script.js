@@ -1,4 +1,4 @@
-const API_URL = https://sweetscan.onrender.com
+https://sweetscan.onrender.com
 
 function send() {
   let input = document.getElementById("input");
