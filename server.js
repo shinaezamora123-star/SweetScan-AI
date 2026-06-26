@@ -16,20 +16,18 @@ const client = new OpenAI({
 
 app.post("/chat", async (req, res) => {
   try {
-
-    const message = req.body.message;
+    console.log("Mensaje recibido:", req.body.message);
 
     const response = await client.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
         {
           role: "system",
-          content:
-            "Eres Dulce Bot 🍬, una IA dulce, amigable y creativa."
+          content: "Eres Dulce Bot 🍬, una IA dulce y amigable."
         },
         {
           role: "user",
-          content: message
+          content: req.body.message
         }
       ]
     });
@@ -39,19 +37,16 @@ app.post("/chat", async (req, res) => {
     });
 
   } catch (error) {
-
-    console.error(error);
+    console.error("ERROR OPENAI:", error);
 
     res.status(500).json({
       reply: "❌ Error: la IA no está conectada correctamente."
     });
-
   }
 });
 
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(`Servidor activo en el puerto ${PORT} 🍬`);
+  console.log(`Servidor activo en puerto ${PORT}`);
 });
-app.listen(3000, () => console.log("Servidor activo 🍬"));
