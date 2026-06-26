@@ -1,8 +1,8 @@
 const API_URL = "https://sweetscan.onrender.com/chat";
 
 function send() {
-  let input = document.getElementById("input");
-  let text = input.value.trim();
+  const input = document.getElementById("input");
+  const text = input.value.trim();
 
   if (!text) return;
 
@@ -30,9 +30,9 @@ function send() {
 }
 
 function add(text, type) {
-  let chat = document.getElementById("chat");
+  const chat = document.getElementById("chat");
 
-  let div = document.createElement("div");
+  const div = document.createElement("div");
   div.classList.add("msg", type);
   div.innerText = text;
 
@@ -46,14 +46,19 @@ function removeTyping() {
   });
 }
 
-/* ✅ ENTER FIX (ESTO ES LO IMPORTANTE) */
-document.addEventListener("DOMContentLoaded", () => {
+/* ✅ ENTER FIJO (ESTA ES LA VERSIÓN QUE NO FALLA) */
+window.onload = function () {
   const input = document.getElementById("input");
+
+  if (!input) {
+    console.error("No se encontró el input");
+    return;
+  }
 
   input.addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
-      event.preventDefault(); // evita saltos raros
+      event.preventDefault();
       send();
     }
   });
-});
+};
