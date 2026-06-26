@@ -36,13 +36,13 @@ app.post("/chat", async (req, res) => {
       reply: response.choices[0].message.content
     });
 
-  } catch (error) {
-    console.error("ERROR OPENAI:", error);
+catch (error) {
+  console.error("ERROR COMPLETO:", error.message);
 
-    res.status(500).json({
-      reply: "❌ Error: la IA no está conectada correctamente."
-    });
-  }
+  res.status(500).json({
+    reply: "❌ " + error.message
+  });
+}
 });
 
 const PORT = process.env.PORT || 3000;
